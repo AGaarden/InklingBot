@@ -1,0 +1,36 @@
+{
+  "name": "Saiko",
+  "version": "0.9.1",
+  "description": "Saiko reporting, ready to help you out with whatever you need.",
+  "main": "bot.js",
+  "author": "Gaarden",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "client": "0.0.1",
+    "discord.js": "^12.5.3",
+    "dotenv": "^8.6.0",
+    "express": "^4.17.1",
+    "fuzzysort": "^1.1.4",
+    "node-fetch": "^2.6.0",
+    "nth-indexof": "^1.0.0",
+    "winston": "^3.2.1"
+  },
+  "homepage": "",
+  "engines": {
+    "node": "8.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gaarden2000/Saiko-bot"
+  },
+  "bugs": {
+    "url": ""
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^7.27.0"
+  }
+}

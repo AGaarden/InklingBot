@@ -69,9 +69,20 @@ client.on('ready', () => {
 });
 
 client.on('message', event => {
-	// Ignore messages sent by a bot, or without the prefix
-	if (!event.content.startsWith(prefix) || event.author.bot) return;
+	// Ignore messages sent by a bot
+	if(event.author.bot) return;
 
+	// If the message has the command prefix, go through command function
+	if (event.content.startsWith(prefix)) {
+		OnCommandMsg(event);
+		return;
+	}
+
+	
+});
+
+// This function is used for messages meant to execute a command
+function OnCommandMsg(event) {
 	// Save everything sent after prefix. First word as command, other following words as arguments
 	// Also sanitises input to change bad quotation marks to good quotation marks
 	const messageSent = event.content.replace(String.fromCharCode(8221), '"').replace(String.fromCharCode(8220), '"');
@@ -80,11 +91,7 @@ client.on('message', event => {
 	commandArgs = commandArgs.splice(1);
 
 	// If bot is messaged in a dm, do this
-	if(event.channel.type == 'dm') {
-		event.channel.send('I prefer my work to be public! Please do not private message me.');
-		console.log('Message received in DM. Author:' + '\n' + event.author.username + '\n' + event.author.id);
-		return;
-	}
+	if(event.channel.type == 'dm') return;
 
 	// If the bot is on a server it is not authorized to be in, do this
 	if(!securityFunctions.CheckAuthorizedServer(event)) return event.channel.send('I do not remember wanting to be here. Leave me.');
@@ -127,4 +134,4 @@ client.on('message', event => {
 			.then(channel => channel.send(`Sent by catch handler\n\nMessage sent\n${messageSent}\n\nError message\n${error.stack}`))
 			.catch(console.error);
 	}
-});
+}

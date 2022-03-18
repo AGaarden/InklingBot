@@ -26,6 +26,7 @@ for (const folder of commandFolders) {
 	}
 }
 
+/*
 // Initialize command folder array and collections for prompt commands
 const qpCommandFiles = fs.readdirSync('./Utility_Functions/Quirk_Prompt_Functions').filter(file => file.endsWith('.js'));
 const wpCommandFiles = fs.readdirSync('./Utility_Functions/Writing_Prompt_Functions').filter(file => file.endsWith('.js'));
@@ -47,6 +48,7 @@ for (const file of tpCommandFiles) {
 	const command = require(`./Utility_Functions/Thread_Prompt_Functions/${file}`);
 	client.tpCommands.set(command.name, command);
 }
+*/
 
 // Variable holding error channel ID
 const errChannelID = '827207044817879091';
@@ -67,7 +69,7 @@ client.on('ready', () => {
 });
 
 client.on('message', event => {
-// Ignore messages sent by a bot, or without the prefix
+	// Ignore messages sent by a bot, or without the prefix
 	if (!event.content.startsWith(prefix) || event.author.bot) return;
 
 	// Save everything sent after prefix. First word as command, other following words as arguments
@@ -119,7 +121,7 @@ client.on('message', event => {
 		command.execute(event, commandArgs);
 	}
 	catch (error) {
-		event.channel.send('I seem to have hit a problem. Please let <@174616332430475264> look at it.');
+		event.channel.send('I seem to have hit a problem. <@174616332430475264> has been given an error message.');
 		client.channels
 			.fetch(errChannelID)
 			.then(channel => channel.send(`Sent by catch handler\n\nMessage sent\n${messageSent}\n\nError message\n${error.stack}`))

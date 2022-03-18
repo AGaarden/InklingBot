@@ -15,9 +15,6 @@ module.exports = {
       case 'ruinin it':
         text = 'https://www.youtube.com/watch?v=Q2BMLLSpTHM';
         break;
-      case 'kuku':
-        text = 'https://cdn.discordapp.com/attachments/711939978703274006/832026059502518343/verykuku.png';
-        break;
       case 'loveandhugs':
         text = 'https://cdn.discordapp.com/attachments/567717620867006486/570574440128053251/Selection_001.png';
         break;

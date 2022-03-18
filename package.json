@@ -1,7 +1,7 @@
 {
-  "name": "Saiko",
-  "version": "0.9.1",
-  "description": "Saiko reporting, ready to help you out with whatever you need.",
+  "name": "Inkling",
+  "version": "0.5",
+  "description": "A highlight bot to replace Carl-Bot on some personal servers.",
   "main": "bot.js",
   "author": "Gaarden",
   "scripts": {
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gaarden2000/Saiko-bot"
+    "url": "https://github.com/SGaarden/Saiko-bot"
   },
   "bugs": {
     "url": ""

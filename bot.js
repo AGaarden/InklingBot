@@ -17,6 +17,9 @@ const commandFolders = fs.readdirSync('./commands');
 // Add the utility functions needed in bot.js
 const securityFunctions = require('./Utility_Functions/securityFunctions.js');
 
+// Add the utility functions for highlight needed in bot.js
+const highlightFunctions = require('./Utility_Functions/highlightFunctions.js');
+
 // Nested for loops goes through every file in every folder and adds them to the collection
 for (const folder of commandFolders) {
 	const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
@@ -68,18 +71,27 @@ client.on('ready', () => {
 	});
 });
 
-client.on('message', event => {
+client.on('messageCreate', message => {
 	// Ignore messages sent by a bot
-	if(event.author.bot) return;
+	if(message.author.bot) return;
 
 	// If the message has the command prefix, go through command function
-	if (event.content.startsWith(prefix)) {
-		OnCommandMsg(event);
+	if (message.content.startsWith(prefix)) {
+		OnCommandMsg(message);
 		return;
 	}
 
-	
+	const highlightedWords = highlightFunctions.CheckForHighlights(message);
+	message.channel.send(highlightedWords);
+	if(highlightedWords != null) {
+		// OnHighlightMsg(message);
+		return;
+	}
 });
+
+client.on('error', (e) => console.error(e));
+client.on('warn', (e) => console.error(e));
+client.on('debug', (e) => console.error(e));
 
 // This function is used for messages meant to execute a command
 function OnCommandMsg(event) {
@@ -135,3 +147,5 @@ function OnCommandMsg(event) {
 			.catch(console.error);
 	}
 }
+
+function OnHighlightMsg(event) {}

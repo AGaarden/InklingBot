@@ -81,16 +81,14 @@ client.on('message', message => {
 		return;
 	}
 
-	let highlightedWords = highlightFunctions.CheckForHighlights(message);
-	if(highlightedWords.length == 0) {
-		highlightedWords = 'Nothing';
-	}
+	// Get array of highlighted words
+	// This can have length 0, aka no words
+	const highlightedWords = highlightFunctions.CheckForHighlights(message);
+	console.log(highlightedWords);
 
-	// console.log(highlightedWords);
-	message.channel.send(highlightedWords);
-
-	if(highlightedWords != null) {
+	if(highlightedWords.length !== 0) {
 		// OnHighlightMsg(message);
+		console.log('ready to highlight');
 		return;
 	}
 });

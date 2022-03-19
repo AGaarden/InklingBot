@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "client": "0.0.1",
-    "discord.js": "^13.6.0",
+    "discord.js": "^12.5.3",
     "dotenv": "^8.6.0",
     "express": "^4.17.1",
     "fuzzysort": "^1.1.4",
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SGaarden/Saiko-bot"
+    "url": "https://github.com/SGaarden/InklingBot"
   },
   "bugs": {
     "url": ""

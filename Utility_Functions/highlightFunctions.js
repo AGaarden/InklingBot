@@ -3,6 +3,7 @@ const fs = require('fs');
 
 module.exports = {
   CheckForHighlights,
+  IdForWords,
 };
 
 // This checks whether a server has someone with a given word highlighted
@@ -19,9 +20,29 @@ function CheckForHighlights(event) {
   const foundWords = [];
   for(let i = 0; i < wordArray.length; i++) {
     for(let j = 0; j < wordFiles.length; j++) {
+      // If it is a txt file, make the word not a txt file
+      let wordFromFile = wordFiles[j];
+      if(wordFromFile.slice(-4)) wordFromFile = wordFiles[j].slice(-4);
+
+      // If a word from message fits a word from file, do thing
       if(wordArray[i] == wordFiles[j]) foundWords.push(wordArray[i]);
     }
   }
 
   return foundWords;
+}
+
+function IdForWords(message, highlightedWords) {
+  const output = []; // This is an array that will house objects
+
+  highlightedWords.forEach(word => {
+    const idObject = {}; // This is an object
+    idObject['word'] = word;
+
+    idObject['ids'] = rw.ReadList(`./Highlights/${message.guild.id}/${word}`);
+
+    output.push(idObject);
+  });
+
+  return output;
 }

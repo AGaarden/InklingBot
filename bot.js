@@ -153,6 +153,12 @@ function OnCommandMsg(event) {
 
 // This function is used for messages meant to be checked for highlights
 function OnHighlightMsg(message, highlightedWords) {
-	
+	// Find id's from highlighted words
+	// For each id, check if they can see the channel
+	// Check time passed since last message in server (channel?) and also dm time
+	// Send message
 
+	const usersToSnitch = highlightFunctions.IdForWords(message, highlightedWords);
+
+	console.log(usersToSnitch);
 }

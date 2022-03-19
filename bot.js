@@ -71,7 +71,7 @@ client.on('ready', () => {
 	});
 });
 
-client.on('messageCreate', message => {
+client.on('message', message => {
 	// Ignore messages sent by a bot
 	if(message.author.bot) return;
 
@@ -81,17 +81,19 @@ client.on('messageCreate', message => {
 		return;
 	}
 
-	const highlightedWords = highlightFunctions.CheckForHighlights(message);
+	let highlightedWords = highlightFunctions.CheckForHighlights(message);
+	if(highlightedWords.length == 0) {
+		highlightedWords = 'Nothing';
+	}
+
+	// console.log(highlightedWords);
 	message.channel.send(highlightedWords);
+
 	if(highlightedWords != null) {
 		// OnHighlightMsg(message);
 		return;
 	}
 });
-
-client.on('error', (e) => console.error(e));
-client.on('warn', (e) => console.error(e));
-client.on('debug', (e) => console.error(e));
 
 // This function is used for messages meant to execute a command
 function OnCommandMsg(event) {

@@ -18,12 +18,14 @@ function CheckForHighlights(event) {
   const wordArray = messageSent.toLowerCase().split(/ +/);
 
   // Make array of words from all file names in server folder
-  const wordFiles = fs.readdirSync(`../Highlights/${event.guildId}`);
+  const wordFiles = fs.readdirSync(`./Highlights/${event.guild.id}`);
 
   // For loop checking wordArray against wordFiles
-  const foundWords = null;
+  const foundWords = [];
   for(let i = 0; i < wordArray.length; i++) {
     for(let j = 0; j < wordFiles.length; j++) {
+      console.log(wordArray[i]);
+      console.log(wordFiles[j]);
       if(wordArray[i] == wordFiles[j]) foundWords.push(wordArray);
     }
   }

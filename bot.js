@@ -85,10 +85,13 @@ client.on('message', message => {
 	// This can have length 0, aka no words
 	const highlightedWords = highlightFunctions.CheckForHighlights(message);
 	console.log(highlightedWords);
+	for(let i = 0; i < highlightedWords.length; i++) {
+		console.log(highlightedWords[i]);
+	}
 
 	if(highlightedWords.length !== 0) {
-		// OnHighlightMsg(message);
 		console.log('ready to highlight');
+		OnHighlightMsg(message, highlightedWords);
 		return;
 	}
 });
@@ -148,4 +151,8 @@ function OnCommandMsg(event) {
 	}
 }
 
-function OnHighlightMsg(event) {}
+// This function is used for messages meant to be checked for highlights
+function OnHighlightMsg(message, highlightedWords) {
+	
+
+}

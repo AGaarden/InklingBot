@@ -96,6 +96,15 @@ function ReadList(fileName) {
   // Read in the list and split it based on newlines
   const list = fs.readFileSync(fileName, 'utf8').split('\n');
 
+  // Remove possible carriage returns that occur at the end of a line
+  for(let i = 0; i < list.length; i++) {
+    if(list[i].slice(-1) == '\r') {
+      list[i] = list[i].slice(0, -1);
+    }
+  }
+
+  if(list[list.length - 1] == '') list.pop();
+
   return list;
 }
 

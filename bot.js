@@ -32,26 +32,18 @@ for (const folder of commandFolders) {
 /*
 // Initialize command folder array and collections for prompt commands
 const qpCommandFiles = fs.readdirSync('./Utility_Functions/Quirk_Prompt_Functions').filter(file => file.endsWith('.js'));
-const wpCommandFiles = fs.readdirSync('./Utility_Functions/Writing_Prompt_Functions').filter(file => file.endsWith('.js'));
-const tpCommandFiles = fs.readdirSync('./Utility_Functions/Thread_Prompt_Functions').filter(file => file.endsWith('.js'));
 client.qpCommands = new Discord.Collection();
-client.wpCommands = new Discord.Collection();
-client.tpCommands = new Discord.Collection();
 
 // Nested for loops goes through every file in the prompt folders and adds them to their respective collections
 for (const file of qpCommandFiles) {
 	const command = require(`./Utility_Functions/Quirk_Prompt_Functions/${file}`);
 	client.qpCommands.set(command.name, command);
 }
-for (const file of wpCommandFiles) {
-	const command = require(`./Utility_Functions/Writing_Prompt_Functions/${file}`);
-	client.wpCommands.set(command.name, command);
-}
-for (const file of tpCommandFiles) {
-	const command = require(`./Utility_Functions/Thread_Prompt_Functions/${file}`);
-	client.tpCommands.set(command.name, command);
-}
 */
+
+// Initialize object array with saved word lists
+const wordList = highlightFunctions.InitializeWordLists();
+console.log(wordList);
 
 // Variable holding error channel ID
 const errChannelID = '827207044817879091';
@@ -83,7 +75,7 @@ client.on('message', message => {
 
 	// Get array of highlighted words
 	// This can have length 0, aka no words
-	const highlightedWords = highlightFunctions.CheckForHighlights(message);
+	const highlightedWords = highlightFunctions.CheckForHighlights(message, wordList);
 
 	if(highlightedWords.length !== 0) {
 		console.log('ready to highlight');

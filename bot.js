@@ -84,10 +84,6 @@ client.on('message', message => {
 	// Get array of highlighted words
 	// This can have length 0, aka no words
 	const highlightedWords = highlightFunctions.CheckForHighlights(message);
-	console.log(highlightedWords);
-	for(let i = 0; i < highlightedWords.length; i++) {
-		console.log(highlightedWords[i]);
-	}
 
 	if(highlightedWords.length !== 0) {
 		console.log('ready to highlight');
@@ -153,12 +149,13 @@ function OnCommandMsg(event) {
 
 // This function is used for messages meant to be checked for highlights
 function OnHighlightMsg(message, highlightedWords) {
-	// Find id's from highlighted words
 	// For each id, check if they can see the channel
 	// Check time passed since last message in server (channel?) and also dm time
 	// Send message
 
+	// Find id's of users with the highlighted words
 	const usersToSnitch = highlightFunctions.IdForWords(message, highlightedWords);
+
 
 	console.log(usersToSnitch);
 }

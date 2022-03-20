@@ -41,7 +41,7 @@ for (const file of qpCommandFiles) {
 }
 */
 
-// Initialize object array with saved word lists
+// Initialize map with saved word lists
 const wordList = highlightFunctions.InitializeWordLists();
 console.log(wordList);
 
@@ -73,10 +73,11 @@ client.on('message', message => {
 		return;
 	}
 
-	// Get array of highlighted words
+	// Get array of highlighted words on server
 	// This can have length 0, aka no words
 	const highlightedWords = highlightFunctions.CheckForHighlights(message, wordList);
 
+	// If there is a list, go to OnHighlightMsg
 	if(highlightedWords.length !== 0) {
 		console.log('ready to highlight');
 		OnHighlightMsg(message, highlightedWords);

@@ -68,7 +68,6 @@ function IdForWords(message, highlightedWords) {
     idObject['ids'] = rw.ReadList(`./Highlights/${message.guild.id}/${word}`);
 
     output.push(idObject);
-    console.log(idObject);
   });
 
   return output;

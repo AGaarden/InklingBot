@@ -64,8 +64,11 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
-	// Ignore messages sent by a bot
-	if(message.author.bot) return;
+	// Ignore messages sent by a bot or in a dm
+	if(message.author.bot || message.channel.type == 'dm') return;
+
+	// If the bot is on a server it is not authorized to be in, do this
+	if(!securityFunctions.CheckAuthorizedServer(message)) return message.channel.send('I do not remember wanting to be here. Leave me.');
 
 	// If the message has the command prefix, go through command function
 	if (message.content.startsWith(prefix)) {
@@ -93,12 +96,6 @@ function OnCommandMsg(event) {
 	let commandArgs = messageSent.substring(prefix.length).split(/ +/);
 	const commandName = commandArgs[0].toLowerCase();
 	commandArgs = commandArgs.splice(1);
-
-	// If bot is messaged in a dm, do this
-	if(event.channel.type == 'dm') return;
-
-	// If the bot is on a server it is not authorized to be in, do this
-	if(!securityFunctions.CheckAuthorizedServer(event)) return event.channel.send('I do not remember wanting to be here. Leave me.');
 
 	// Find the right command in the collection, either by name or by alias
 	const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));

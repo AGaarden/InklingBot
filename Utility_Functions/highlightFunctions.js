@@ -37,17 +37,9 @@ function CheckForHighlights(message, listBuffer) {
   // For loop checking wordArray against wordFiles
   const foundWords = [];
   for(let i = 0; i < wordArray.length; i++) {
-    for(let j = 0; j < savedWordList.length; j++) {
-      // If it is a txt file, make the word not a txt file
-      console.log(wordArray[i]);
-      console.log(savedWordList[j]);
-
-      // If a word from message fits a word from file, do thing
-      if(wordArray[i] == savedWordList[j]) {
-        foundWords.push(savedWordList[j]); // Push the found word to output list
-        // savedWordList.splice(j, 1); // Remove the possible word to find from the list
-        break; // Break out of loop so it does not check through the whole list for the same word
-      }
+    // If a word from message fits a word from file, do thing
+    if(savedWordList.includes(wordArray[i])) {
+      foundWords.push(wordArray);
     }
   }
 

@@ -146,8 +146,10 @@ function OnHighlightMsg(message, highlightedWords) {
 	// Find id's of users with the highlighted words
 	let usersToSnitch = highlightFunctions.IdForWords(message, highlightedWords);
 
-	// Sort users out that can't see the channel
+	// Sort users out that can't see the channel, return if none are left
 	usersToSnitch = highlightFunctions.CheckForPerms(message, usersToSnitch);
+	if(usersToSnitch.size == 0) return;
 
-	console.log(usersToSnitch);
+	// Sort users out that was pinged recently or was recently in the channel
+	usersToSnitch = highlightFunctions.CheckTimePassed(message, usersToSnitch);
 }

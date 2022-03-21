@@ -6,6 +6,7 @@ module.exports = {
   CheckForHighlights,
   IdForWords,
   CheckForPerms,
+  CheckTimePassed,
 };
 
 function InitializeWordLists() {
@@ -44,6 +45,8 @@ function CheckForHighlights(message, listBuffer) {
     }
   }
 
+  console.log('Output from CheckForHighlights:');
+  console.log(foundWords);
   return foundWords;
 }
 
@@ -53,9 +56,15 @@ function IdForWords(message, highlightedWords) {
   highlightedWords.forEach(word => {
     const ids = rw.ReadList(`./Highlights/${message.guild.id}/${word}`);
 
-    output.set(word, ids);
+    for(let i = 0; i < ids.length; i++) {
+      if(!output.has(ids[i])) {
+        output.set(ids[i], word);
+      }
+    }
   });
 
+  console.log('Output from IdForWords:');
+  console.log(output);
   return output;
 }
 
@@ -64,17 +73,32 @@ function CheckForPerms(message, allUsersToSnitch) {
   const output = new Map();
 
   for(const [key, value] of allUsersToSnitch) {
-    const usersToSnitch = [];
-    for(let i = 0; i < value.length; i++) {
-      if(message.channel.members.has(value[i])) {
-        usersToSnitch.push(value[i]);
-      }
-    }
-
-    if(usersToSnitch.length !== 0) {
-      output.set(key, usersToSnitch);
+    if(message.channel.members.has(key)) {
+      output.set(key, value);
     }
   }
 
+  console.log('Output from CheckForPerms:');
+  console.log(output);
   return output;
+}
+
+function CheckTimePassed(message, allUsersToSnitch) {
+
+  for(const [key, value] of allUsersToSnitch) {
+
+    console.log(message.guild)
+
+    let timeSinceLastDm = 0;
+    try { // Write difference between now and the last time a dm was sent between Inkling and user
+      timeSinceLastDm = Date.now() - key.author.dmChannel.lastMessage.createdAt.getTime();
+    }
+    catch(error) { // If the dm can't be read, assume 5 minutes
+      console.log(error);
+      timeSinceLastDm = 300000;
+    }
+  }
+
+
+  // message.author
 }

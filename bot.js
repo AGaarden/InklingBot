@@ -147,8 +147,10 @@ function OnHighlightMsg(message, highlightedWords) {
 	// Send message
 
 	// Find id's of users with the highlighted words
-	const usersToSnitch = highlightFunctions.IdForWords(message, highlightedWords);
+	let usersToSnitch = highlightFunctions.IdForWords(message, highlightedWords);
 
+	// Sort users out that can't see the channel
+	usersToSnitch = highlightFunctions.CheckForPerms(message, usersToSnitch);
 
 	console.log(usersToSnitch);
 }

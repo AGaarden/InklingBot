@@ -5,6 +5,7 @@ module.exports = {
   InitializeWordLists,
   CheckForHighlights,
   IdForWords,
+  CheckForPerms,
 };
 
 function InitializeWordLists() {
@@ -39,7 +40,7 @@ function CheckForHighlights(message, listBuffer) {
   for(let i = 0; i < wordArray.length; i++) {
     // If a word from message fits a word from file, do thing
     if(savedWordList.includes(wordArray[i])) {
-      foundWords.push(wordArray);
+      foundWords.push(wordArray[i]);
     }
   }
 
@@ -47,18 +48,33 @@ function CheckForHighlights(message, listBuffer) {
 }
 
 function IdForWords(message, highlightedWords) {
-  const output = []; // This is an array that will house objects
-
-  console.log(highlightedWords);
+  const output = new Map();
 
   highlightedWords.forEach(word => {
-    const idObject = {}; // This is an object
-    idObject['word'] = word;
+    const ids = rw.ReadList(`./Highlights/${message.guild.id}/${word}`);
 
-    idObject['ids'] = rw.ReadList(`./Highlights/${message.guild.id}/${word}`);
-
-    output.push(idObject);
+    output.set(word, ids);
   });
+
+  return output;
+}
+
+function CheckForPerms(message, allUsersToSnitch) {
+  // Iterate through allUsers, check if they can see channel
+  const output = new Map();
+
+  for(const [key, value] of allUsersToSnitch) {
+    const usersToSnitch = [];
+    for(let i = 0; i < value.length; i++) {
+      if(message.channel.members.has(value[i])) {
+        usersToSnitch.push(value[i]);
+      }
+    }
+
+    if(usersToSnitch.length !== 0) {
+      output.set(key, usersToSnitch);
+    }
+  }
 
   return output;
 }

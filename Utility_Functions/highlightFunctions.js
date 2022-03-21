@@ -42,12 +42,10 @@ function CheckForHighlights(message, listBuffer) {
       console.log(wordArray[i]);
       console.log(savedWordList[j]);
 
-      console.log(savedWordList[j]);
-
       // If a word from message fits a word from file, do thing
       if(wordArray[i] == savedWordList[j]) {
         foundWords.push(savedWordList[j]); // Push the found word to output list
-        savedWordList.splice(j, 1); // Remove the possible word to find from the list
+        // savedWordList.splice(j, 1); // Remove the possible word to find from the list
         break; // Break out of loop so it does not check through the whole list for the same word
       }
     }

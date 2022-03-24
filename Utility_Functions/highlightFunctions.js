@@ -3,12 +3,14 @@ const fs = require('fs');
 
 module.exports = {
   InitializeWordLists,
+  InitializeUserTimestamps,
   CheckForHighlights,
   IdForWords,
   CheckForPerms,
   CheckTimePassed,
 };
 
+// This function builds a map of words per server
 function InitializeWordLists() {
   const output = new Map();
 
@@ -21,6 +23,41 @@ function InitializeWordLists() {
     }
 
     output.set(server, serverWords);
+  });
+
+  return output;
+}
+
+function InitializeUserTimestamps(client) {
+  const output = new Map();
+
+  const serverIds = fs.readdirSync('./Highlights');
+
+  serverIds.forEach(server => {
+    const userList = new Map();
+
+    client.guilds.cache.get(server).channels.cache.forEach(ch => {
+      if(ch.type === 'text') {
+        ch.messages.fetch({
+          limit: 100
+        }).then(messages => {
+          // Filter bot messages away
+          const msgs = messages.filter(m => m.author == /*bot*/);
+
+          // Only put something in if the time for the user is newer
+          msgs.forEach(m => {
+            if(/* m.timestamp > userList.get(m.author).timestamp */) {
+              /* userList.set(m.author, m.timestamp)*/
+            }
+          });
+
+        })
+      }
+      else return;
+    })
+
+    // Set a kvp in output by server id and userlist map with timestamps
+    output.set(server, userList);
   });
 
   return output;

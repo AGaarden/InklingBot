@@ -45,6 +45,10 @@ for (const file of qpCommandFiles) {
 const wordList = highlightFunctions.InitializeWordLists();
 console.log(wordList);
 
+// Initialize map of users last message times
+const userTimestamps = highlightFunctions.InitializeUserTimestamps(client);
+console.log(userTimestamps);
+
 // Variable holding error channel ID
 const errChannelID = '827207044817879091';
 
@@ -69,6 +73,17 @@ client.on('message', message => {
 
 	// If the bot is on a server it is not authorized to be in, do this
 	if(!securityFunctions.CheckAuthorizedServer(message)) return message.channel.send('I do not remember wanting to be here. Leave me.');
+
+
+
+
+
+	// Note a new timestamp
+	userTimestamps.get(server).set(message.author, /* message timestamp */);/*Not finished*/
+
+
+
+
 
 	// If the message has the command prefix, go through command function
 	if (message.content.startsWith(prefix)) {
@@ -139,10 +154,6 @@ function OnCommandMsg(event) {
 
 // This function is used for messages meant to be checked for highlights
 function OnHighlightMsg(message, highlightedWords) {
-	// For each id, check if they can see the channel
-	// Check time passed since last message in server (channel?) and also dm time
-	// Send message
-
 	// Find id's of users with the highlighted words
 	let usersToSnitch = highlightFunctions.IdForWords(message, highlightedWords);
 
@@ -152,4 +163,6 @@ function OnHighlightMsg(message, highlightedWords) {
 
 	// Sort users out that was pinged recently or was recently in the channel
 	usersToSnitch = highlightFunctions.CheckTimePassed(message, usersToSnitch);
+
+	// Send message
 }

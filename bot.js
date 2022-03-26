@@ -46,8 +46,7 @@ const wordList = highlightFunctions.InitializeWordLists();
 console.log(wordList);
 
 // Initialize map of users last message times
-const userTimestamps = highlightFunctions.InitializeUserTimestamps(client);
-console.log(userTimestamps);
+const userTimestamps = highlightFunctions.InitializeUserTimestamps();
 
 // Variable holding error channel ID
 const errChannelID = '827207044817879091';
@@ -72,18 +71,11 @@ client.on('message', message => {
 	if(message.author.bot || message.channel.type == 'dm') return;
 
 	// If the bot is on a server it is not authorized to be in, do this
-	if(!securityFunctions.CheckAuthorizedServer(message)) return message.channel.send('I do not remember wanting to be here. Leave me.');
-
-
-
-
+	if(!securityFunctions.CheckAuthorizedServer(message)) return console.log('I am not set up for the following server: ' + message.guild.name);
 
 	// Note a new timestamp
-	userTimestamps.get(server).set(message.author, /* message timestamp */);/*Not finished*/
-
-
-
-
+	if(!userTimestamps.has(message.guild.id)) userTimestamps.set(message.guild.id, new Map());
+	userTimestamps.get(message.guild.id).set(message.author.id, message.createdAt.getTime());
 
 	// If the message has the command prefix, go through command function
 	if (message.content.startsWith(prefix)) {

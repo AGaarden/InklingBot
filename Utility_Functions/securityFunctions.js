@@ -45,9 +45,6 @@ function CheckAuthorizedAccess(event, securityLevel) {
 }
 
 function CheckAuthorizedServer(event) {
-  // Always accept commands from bot creator
-  if(event.member.id == 174616332430475264) return true;
-
   // Read in the server the bot is being used in
   const currentServerID = event.guild.id;
 

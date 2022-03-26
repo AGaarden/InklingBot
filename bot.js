@@ -154,7 +154,9 @@ function OnHighlightMsg(message, highlightedWords) {
 	if(usersToSnitch.size == 0) return;
 
 	// Sort users out that was pinged recently or was recently in the channel
-	usersToSnitch = highlightFunctions.CheckTimePassed(message, usersToSnitch);
+	highlightFunctions.CheckTimePassed(message, usersToSnitch, userTimestamps);
 
-	// Send message
+	// Send message if there are users left
+	if(usersToSnitch.size == 0) return;
+
 }

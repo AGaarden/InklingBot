@@ -1,5 +1,6 @@
 const rw = require('./rwFunctions.js');
 const fs = require('fs');
+const { DMWAITTIME, INSERVERWAITTIME } = require('../config.json');
 
 module.exports = {
   InitializeWordLists,
@@ -47,7 +48,7 @@ function InitializeUserTimestamps() {
 // This returns an array of words that should be highlighted
 function CheckForHighlights(message, listBuffer) {
   // Sanitise input for only letters + whitespace and split into separate array
-  const messageSent = message.content.replace(/[^a-z\s]/gi, '');
+  const messageSent = message.content.replace(/[^a-z\s]/gi, '').replace(/[\n\r]/, ' ');
   const wordArray = messageSent.toLowerCase().split(/ +/);
 
   // Make array of words from all file names in server folder
@@ -100,22 +101,36 @@ function CheckForPerms(message, allUsersToSnitch) {
   return output;
 }
 
-function CheckTimePassed(message, allUsersToSnitch) {
-
-  for(const [key, value] of allUsersToSnitch) {
-
-    console.log(message.guild)
-
-    let timeSinceLastDm = 0;
-    try { // Write difference between now and the last time a dm was sent between Inkling and user
-      timeSinceLastDm = Date.now() - key.author.dmChannel.lastMessage.createdAt.getTime();
+function CheckTimePassed(message, allUsersToSnitch, userTimestamps) {
+  for(const userId of allUsersToSnitch.keys()) {
+    // If they've been in the server before time is up
+    if(userTimestamps.get(message.guild.id).get(userId) < INSERVERWAITTIME) {
+      allUsersToSnitch.delete(userId);
     }
-    catch(error) { // If the dm can't be read, assume 5 minutes
-      console.log(error);
-      timeSinceLastDm = 300000;
+    else { // If they've been off server for longer
+      userTimestamps.get(message.guild.id).set(userId, Date.now());
     }
   }
 
+  return 1;
 
-  // message.author
+  // for(const userId of allUsersToSnitch.keys()) {
+  //   let timeSinceLastDm = 0;
+  //   try { // Write difference between now and the last time a dm was sent between Inkling and user
+  //     await client.users.fetch(userId).dmChannel.fetch().then(ch => {
+  //       timeSinceLastDm = Date.now() - ch.lastMessage.createdAt.getTime();
+  //     });
+  //     // timeSinceLastDm = Date.now() - user.dmChannel.lastMessage.createdAt.getTime();
+  //   }
+  //   catch(error) { // If the dm can't be read, assume 5 minutes
+  //     console.log(error);
+  //     timeSinceLastDm = DMWAITTIME;
+  //   }
+  //
+  //   console.log(timeSinceLastDm);
+  //
+  //   if(timeSinceLastDm < DMWAITTIME || userTimestamps.get(message.guild.id).get(userId) < INSERVERWAITTIME) {
+  //     allUsersToSnitch.delete(userId);
+  //   }
+  // }
 }

@@ -158,5 +158,6 @@ function OnHighlightMsg(message, highlightedWords) {
 
 	// Send message if there are users left
 	if(usersToSnitch.size == 0) return;
-
+	console.log('Ready to send messages');
+	highlightFunctions.SendMessages(client, usersToSnitch);
 }

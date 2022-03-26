@@ -9,6 +9,7 @@ module.exports = {
   IdForWords,
   CheckForPerms,
   CheckTimePassed,
+  SendMessages
 };
 
 // This function builds a map of words per server
@@ -133,4 +134,14 @@ function CheckTimePassed(message, allUsersToSnitch, userTimestamps) {
   //     allUsersToSnitch.delete(userId);
   //   }
   // }
+}
+
+function SendMessages(client, usersToSnitch) {
+  for(const userId of usersToSnitch.keys()) {
+    client.users.fetch(userId).then(user => {
+      user.createDM().then(ch => {
+        ch.send('Test');
+      });
+    });
+  }
 }

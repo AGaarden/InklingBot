@@ -87,14 +87,17 @@ function IdForWords(message, highlightedWords) {
   return output;
 }
 
-function CheckForPerms(message, allUsersToSnitch) {
+async function CheckForPerms(message, allUsersToSnitch) {
   // Iterate through allUsers, check if they can see channel
   const output = new Map();
 
-  for(const [key, value] of allUsersToSnitch) {
-    if(message.channel.members.has(key)) {
-      output.set(key, value);
-    }
+  // This loop fetches members (yoinks from cache if possible), then checks if they're in the channel
+  for(const userId of allUsersToSnitch.keys()) {
+    await message.channel.fetch().then(ch => {
+      if(ch.members.has(userId)) {
+        output.set(userId, allUsersToSnitch.get(userId));
+      }
+    });
   }
 
   console.log('Output from CheckForPerms:');
@@ -102,45 +105,38 @@ function CheckForPerms(message, allUsersToSnitch) {
   return output;
 }
 
-function CheckTimePassed(message, allUsersToSnitch, userTimestamps) {
+async function CheckTimePassed(message, allUsersToSnitch, userTimestamps) {
   for(const userId of allUsersToSnitch.keys()) {
-    // If they've been in the server before time is up
-    if(userTimestamps.get(message.guild.id).get(userId) < INSERVERWAITTIME) {
-      allUsersToSnitch.delete(userId);
+    console.log(message.channel.members.get(userId));
+    let timeSinceLastDm = 0;
+    try {
+      await message.channel.members.get(userId).user.fetch().then(user => {
+        user.dmChannel.fetch().then(ch => {
+          timeSinceLastDm = Date.now() - ch.lastMessage.createdAt.getTime();
+        });
+      });
     }
-    else { // If they've been off server for longer
-      userTimestamps.get(message.guild.id).set(userId, Date.now());
+    catch (error) {
+      timeSinceLastDm = DMWAITTIME;
+    }
+
+    console.log(timeSinceLastDm);
+
+    if(timeSinceLastDm < DMWAITTIME || userTimestamps.get(message.guild.id).get(userId) < INSERVERWAITTIME) {
+      allUsersToSnitch.delete(userId);
     }
   }
 
   return 1;
-
-  // for(const userId of allUsersToSnitch.keys()) {
-  //   let timeSinceLastDm = 0;
-  //   try { // Write difference between now and the last time a dm was sent between Inkling and user
-  //     await client.users.fetch(userId).dmChannel.fetch().then(ch => {
-  //       timeSinceLastDm = Date.now() - ch.lastMessage.createdAt.getTime();
-  //     });
-  //     // timeSinceLastDm = Date.now() - user.dmChannel.lastMessage.createdAt.getTime();
-  //   }
-  //   catch(error) { // If the dm can't be read, assume 5 minutes
-  //     console.log(error);
-  //     timeSinceLastDm = DMWAITTIME;
-  //   }
-  //
-  //   console.log(timeSinceLastDm);
-  //
-  //   if(timeSinceLastDm < DMWAITTIME || userTimestamps.get(message.guild.id).get(userId) < INSERVERWAITTIME) {
-  //     allUsersToSnitch.delete(userId);
-  //   }
-  // }
 }
 
-function SendMessages(client, usersToSnitch) {
+function SendMessages(client, message, usersToSnitch) {
   for(const userId of usersToSnitch.keys()) {
     client.users.fetch(userId).then(user => {
       user.createDM().then(ch => {
-        ch.send('Test');
+        ch.send(
+          'Someone mentioned "' + usersToSnitch.get(userId) + '" in **' + message.guild.name + '**.\nFind the message here: ' + message.url
+        );
       });
     });
   }

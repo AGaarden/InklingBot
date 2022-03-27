@@ -137,13 +137,15 @@ function OnCommandMsg(event) {
 		event.channel.send('I seem to have hit a problem. <@174616332430475264> has been given an error message.');
 		client.channels
 			.fetch(errChannelID)
-			.then(channel => channel.send(`Sent by catch handler\n\nMessage sent\n${messageSent}\n\nError message\n${error.stack}`))
+			.then(channel => channel.send(`**Sent by CommandMsg catch handler**\n**Message sent:**\n${messageSent}\n\n**Error message**\n${error.stack}`))
 			.catch(console.error);
 	}
 }
 
 // This function is used for messages meant to be checked for highlights
 async function OnHighlightMsg(message, highlightedWords) {
+	try {
+	console.log(wordList);
 	// Find id's of users with the highlighted words
 	let usersToSnitch = highlightFunctions.IdForWords(message, highlightedWords);
 
@@ -165,4 +167,11 @@ async function OnHighlightMsg(message, highlightedWords) {
 	console.log('People to dm:\n');
 	console.log(usersToSnitch);
 	highlightFunctions.SendMessages(client, message, usersToSnitch);
+	}
+	catch(error) {
+		client.channels
+			.fetch(errChannelID)
+			.then(channel => channel.send(`**Sent by HighlightMsg catch handler**\n**Error message**\n${error.stack}`))
+			.catch(console.error);
+	}
 }

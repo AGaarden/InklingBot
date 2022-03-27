@@ -29,17 +29,15 @@ for (const folder of commandFolders) {
 	}
 }
 
-/*
-// Initialize command folder array and collections for prompt commands
-const qpCommandFiles = fs.readdirSync('./Utility_Functions/Quirk_Prompt_Functions').filter(file => file.endsWith('.js'));
-client.qpCommands = new Discord.Collection();
+// Initialize command folder array and collections for highlight commands
+const hlCommandFiles = fs.readdirSync('./Utility_Functions/Highlight_Functions').filter(file => file.endsWith('.js'));
+client.hlCommands = new Discord.Collection();
 
 // Nested for loops goes through every file in the prompt folders and adds them to their respective collections
-for (const file of qpCommandFiles) {
-	const command = require(`./Utility_Functions/Quirk_Prompt_Functions/${file}`);
-	client.qpCommands.set(command.name, command);
+for (const file of hlCommandFiles) {
+	const command = require(`./Utility_Functions/Highlight_Functions/${file}`);
+	client.hlCommands.set(command.name, command);
 }
-*/
 
 // Initialize map with saved word lists
 const wordList = highlightFunctions.InitializeWordLists();

@@ -5,9 +5,9 @@ module.exports = {
   name: 'highlight',
   description: 'This command lets you use functions related to highlights.',
   aliases: ['hl'],
-  usage: '<command modifier> <additional info for command modifier>' + '\n' + 'Command modifiers: add|a, list|l, remove|r',
+  usage: '<command modifier> <additional info for command modifier>' + '\n' + 'Command modifiers: add|a, remove|r, list|l',
   args: 'true',
-  execute(event, commandArgs) {
+  execute(event, commandArgs, wordList) {
     // commandArgs are gained from the command call
     const commandName = commandArgs[0].toLowerCase();
     commandArgs = commandArgs.splice(1);
@@ -39,6 +39,6 @@ module.exports = {
       return event.channel.send(reply);
     }
 
-    command.execute(event, commandArgs);
+    command.execute(event, commandArgs, wordList);
   },
 };

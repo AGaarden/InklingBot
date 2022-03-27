@@ -131,7 +131,7 @@ function OnCommandMsg(event) {
 
 	// Attempt to execute a command, and catch errors if needed. Sends a message to say there was an error, then sends an error message to private error channel
 	try {
-		command.execute(event, commandArgs);
+		command.execute(event, commandArgs, wordList);
 	}
 	catch (error) {
 		event.channel.send('I seem to have hit a problem. <@174616332430475264> has been given an error message.');

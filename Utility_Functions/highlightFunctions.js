@@ -107,7 +107,6 @@ async function CheckForPerms(message, allUsersToSnitch) {
 
 async function CheckTimePassed(message, allUsersToSnitch, userTimestamps) {
   for(const userId of allUsersToSnitch.keys()) {
-    console.log(message.channel.members.get(userId));
     let timeSinceLastDm = 0;
     try {
       await message.channel.members.get(userId).user.fetch().then(user => {

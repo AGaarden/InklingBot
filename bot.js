@@ -145,19 +145,26 @@ function OnCommandMsg(event) {
 }
 
 // This function is used for messages meant to be checked for highlights
-function OnHighlightMsg(message, highlightedWords) {
+async function OnHighlightMsg(message, highlightedWords) {
 	// Find id's of users with the highlighted words
 	let usersToSnitch = highlightFunctions.IdForWords(message, highlightedWords);
 
 	// Sort users out that can't see the channel, return if none are left
-	usersToSnitch = highlightFunctions.CheckForPerms(message, usersToSnitch);
+	usersToSnitch = (await highlightFunctions.CheckForPerms(message, usersToSnitch));
 	if(usersToSnitch.size == 0) return;
 
 	// Sort users out that was pinged recently or was recently in the channel
-	highlightFunctions.CheckTimePassed(message, usersToSnitch, userTimestamps);
+	await highlightFunctions.CheckTimePassed(message, usersToSnitch, userTimestamps);
+
+	// If the message sender is one of the people that would be pinged, remove from usersToSnitch
+	if(usersToSnitch.has(message.author.id)) {
+		console.log('Removed original user');
+		usersToSnitch.delete(message.author.id);
+	}
 
 	// Send message if there are users left
 	if(usersToSnitch.size == 0) return;
-	console.log('Ready to send messages');
-	highlightFunctions.SendMessages(client, usersToSnitch);
+	console.log('People to dm:\n');
+	console.log(usersToSnitch);
+	highlightFunctions.SendMessages(client, message, usersToSnitch);
 }

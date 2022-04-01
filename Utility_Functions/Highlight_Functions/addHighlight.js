@@ -17,10 +17,10 @@ module.exports = {
     }
 
     // Add the user that highlighted the word to the given file
-    rw.WriteLineToList(`./Highlights/${message.guild.id}/${highlight}`, message.author.id);
+    rw.WriteLineToList(`./Highlights/${message.guild.id}/${highlight.toLowerCase()}`, message.author.id);
 
-    // Add to the wordlist
-    wordList.get(message.guild.id).push(highlight);
+    // Add to the wordlist in lower case
+    wordList.get(message.guild.id).push(highlight.toLowerCase());
 
     message.channel.send(`I have added ${highlight} to your highlighted words.`);
   },

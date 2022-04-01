@@ -21,7 +21,7 @@ function InitializeWordLists() {
   serverIds.forEach(server => {
     const serverWords = fs.readdirSync(`./Highlights/${server}`);
     for(let i = 0; i < serverWords.length; i++) {
-      serverWords[i] = serverWords[i].slice(0, -4);
+      serverWords[i] = serverWords[i].slice(0, -4).toLowerCase();
     }
 
     output.set(server, serverWords);
@@ -73,11 +73,13 @@ function IdForWords(message, highlightedWords) {
   const output = new Map();
 
   highlightedWords.forEach(word => {
-    const ids = rw.ReadList(`./Highlights/${message.guild.id}/${word}`);
+    if(fs.existsSync(`./Highlights/${message.guild.id}/${word}.txt`)) {
+      const ids = rw.ReadList(`./Highlights/${message.guild.id}/${word}`);
 
-    for(let i = 0; i < ids.length; i++) {
-      if(!output.has(ids[i])) {
-        output.set(ids[i], word);
+      for(let i = 0; i < ids.length; i++) {
+        if(!output.has(ids[i])) {
+          output.set(ids[i], word);
+        }
       }
     }
   });
@@ -133,8 +135,8 @@ function SendMessages(client, message, usersToSnitch) {
   for(const userId of usersToSnitch.keys()) {
     client.users.fetch(userId).then(user => {
       user.createDM().then(ch => {
-        ch.send(
-          'Someone mentioned "' + usersToSnitch.get(userId) + '" in **' + message.guild.name + '**.\nFind the message here: ' + message.url
+        ch.send( // The message sent here will be: Someone mentioned "<highlight in uppercase>" in <server>. Find the message here: <message link>
+          'Someone mentioned "' + usersToSnitch.get(userId).charAt(0).toUpperCase() + usersToSnitch.get(userId).slice(1) + '" in **' + message.guild.name + '**.\nFind the message here: ' + message.url
         );
       });
     });

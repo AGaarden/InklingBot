@@ -24,6 +24,10 @@ module.exports = {
       case 'cornertime':
         text = 'Go to cornertime \nhttps://i2.wp.com/66.media.tumblr.com/b2a2247751272391a7924e299594f16c/tumblr_pftllzU1d31qh1kk3_1280.png';
         break;
+      case 'source':
+      case 'sauce':
+        text = 'My image comes from this page: <https://www.zerochan.net/1888605>';
+        break;
     }
 
     event.channel.send(text);

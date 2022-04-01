@@ -1,5 +1,6 @@
 const rw = require('../rwFunctions.js');
 const fs = require('fs');
+const fse = require('fs-extra');
 
 module.exports = {
   name: 'remove',
@@ -28,9 +29,9 @@ module.exports = {
       // If the file would be empty, delete it and remove the word from the word list
       if(highlightUserList.length === 0) {
         const wordListArray = wordList.get(message.guild.id);
-        wordListArray.splice(wordListArray.indexOf(message.author.id, 0), 1);
+        wordListArray.splice(wordListArray.indexOf(highlight, 0), 1);
 
-        fs.rmSync(highlightFilePath);
+        fse.removeSync(highlightFilePath);
 
         return message.channel.send(`I have removed ${highlight} from your highlighted words.`);
       }
